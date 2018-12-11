@@ -1,14 +1,14 @@
 {
-  "name": "RCTWebRTCDemo",
+  "name": "rctwebrtcdemo",
   "version": "0.0.1",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
-    "react": "16.0.0-alpha.6",
-    "react-native": "^0.44.0",
-    "react-native-webrtc": "git+https://git@github.com/oney/react-native-webrtc.git",
+    "react": "16.6.1",
+    "react-native": "^0.57.7",
+    "react-native-webrtc": "^1.67.1",
     "socket.io-client": "^1.3.7"
   }
 }

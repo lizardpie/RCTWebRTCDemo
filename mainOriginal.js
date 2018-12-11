@@ -26,13 +26,6 @@ import {
   getUserMedia,
 } from 'react-native-webrtc';
 
-//console.log("Starting app!");
-console.disableYellowBox = true;
-console.ignoredYellowBox = [
-  "Setting a timer",
-  "ListView is deprecated"
-];
-
 const configuration = {"iceServers": [{"url": "stun:stun.l.google.com:19302"}]};
 
 const pcPeers = {};
@@ -74,7 +67,6 @@ function getLocalStream(isFront, callback) {
 }
 
 function join(roomID) {
-  console.log('emitting join', roomID);
   socket.emit('join', roomID, function(socketIds){
     console.log('join', socketIds);
     for (const i in socketIds) {
@@ -251,12 +243,10 @@ function getStats() {
 
 let container;
 
-export default class RCTWebRTCDemo extends React.Component {
-
-  constructor(props) {
-    super(props);
+const RCTWebRTCDemo = React.createClass({
+  getInitialState: function() {
     this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => true});
-    this.state = {
+    return {
       info: 'Initializing',
       status: 'init',
       roomID: '',
@@ -267,19 +257,16 @@ export default class RCTWebRTCDemo extends React.Component {
       textRoomData: [],
       textRoomValue: '',
     };
-  }
-
-  componentDidMount = () => {
+  },
+  componentDidMount: function() {
     container = this;
-  }
-
-  _press = (event) => {
+  },
+  _press(event) {
     this.refs.roomID.blur();
     this.setState({status: 'connect', info: 'Connecting'});
     join(this.state.roomID);
-  } 
-
-  _switchVideoType = () => {
+  },
+  _switchVideoType() {
     const isFront = !this.state.isFront;
     this.setState({isFront});
     getLocalStream(isFront, function(stream) {
@@ -298,15 +285,13 @@ export default class RCTWebRTCDemo extends React.Component {
         pc && pc.addStream(localStream);
       }
     });
-  }
-
-  receiveTextData = (data) => {
+  },
+  receiveTextData(data) {
     const textRoomData = this.state.textRoomData.slice();
     textRoomData.push(data);
     this.setState({textRoomData, textRoomValue: ''});
-  }
-
-  _textRoomPress = () => {
+  },
+  _textRoomPress() {
     if (!this.state.textRoomValue) {
       return
     }
@@ -317,9 +302,8 @@ export default class RCTWebRTCDemo extends React.Component {
       pc.textDataChannel.send(this.state.textRoomValue);
     }
     this.setState({textRoomData, textRoomValue: ''});
-  }
-
-  _renderTextRoom = () => {
+  },
+  _renderTextRoom() {
     return (
       <View style={styles.listViewContainer}>
         <ListView
@@ -337,8 +321,7 @@ export default class RCTWebRTCDemo extends React.Component {
         </TouchableHighlight>
       </View>
     );
-  }
-
+  },
   render() {
     return (
       <View style={styles.container}>
@@ -380,7 +363,7 @@ export default class RCTWebRTCDemo extends React.Component {
       </View>
     );
   }
-}
+});
 
 const styles = StyleSheet.create({
   selfView: {
